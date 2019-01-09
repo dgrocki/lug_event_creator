@@ -1,0 +1,103 @@
+#!/bin/bash
+
+#run this script in the directory you wish to populate
+#creates 10 mkd files, one for each week
+#if defualt info for meetings change, changes can be made in the echo statements below
+#the only info that this takes are a month (3letter abbreviation) day and year
+
+#gets seed month day and year from command line
+smonth=$1
+sday=$2
+syear=$3
+
+if [ $# -ne 3 ]
+then
+	echo "Need 3 arguments Month (3 letter abbreviation) Day and Year"
+	exit 1
+fi
+
+#loops for 10 weeks
+for i in {1..10}
+do
+#creates a seed date from the info
+seeddate="$smonth $sday $syear"
+
+#parses a day month and year from the date funciton
+day=$(date -d "${seeddate} + `expr $i - 1`weeks" | tr -s " " | cut -f3 -d\ )	#date finds a date starting at seeddate + x number of weeks
+month=$(date -d "${seeddate} + `expr $i - 1`weeks"  | tr -s " " | cut -f2 -d\ ) #expr calculates how many weeks we are in
+year=$(date -d "${seeddate} + `expr $i - 1`weeks"  | tr -s " " | cut -f6 -d\ )  #tr prevents multi spaces and cut finds the item we need
+
+
+
+#need months in number format
+nmonth=00
+
+case "$month" in
+	Jan)
+		nmonth=01
+		;;
+	Feb)
+		nmonth=02
+		;;
+	Mar)
+		nmonth=03
+		;;
+	Apr)
+		nmonth=04
+		;;
+	May)
+		nmonth=05
+		;;
+	Jun)
+		nmonth=06
+		;;
+	Jul)
+		nmonth=07
+		;;
+	Aug)
+		nmonth=08
+		;;
+	Sep)
+		nmonth=09
+		;;
+	Oct)
+		nmonth=10
+		;;
+	Nov)
+		nmonth=11
+		;;
+	Dec)
+		nmonth=12
+		;;
+	*)
+esac
+
+#convert days to 2 digits if not already
+if [ $day -lt 10 ]
+then
+	nday=0$day
+else
+	nday=$day
+fi
+
+	
+	datetime=$year$nmonth${nday}_wk${i}.mkd	#creates filename
+
+
+	#default info
+	touch $datetime
+	echo "title: TBD" >> $datetime
+	echo "datetime: ${year}-${nmonth}-${nday} 18:00:00" >> $datetime
+	echo "category: events" >> $datetime
+	echo "slug: meeting$year$nmonth$nday" >> $datetime	
+	echo "preview: TBD" >> $datetime
+	echo "location: Kelly Engineering Center 1007" >> $datetime
+	echo -e "\n---\n" >> $datetime
+	echo -e "Event Info Goes Here\n" >> $datetime
+	echo "When: 6pm" >> $datetime
+	echo "Where: Kelly Engineering Center room 1007" >> $datetime
+
+
+done
+
+
