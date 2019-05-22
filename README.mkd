@@ -1,0 +1,11 @@
+# Purpose
+Create files for the events of each term. It creates 10 files with correct date and file formating for the term.
+
+# Instructions
+- Run in the directory for the current term under events.
+- Arguments are 3 letter abreviation of the month, day, year 
+- Use the date of the first meeting for the term to seed it, it will then generate dates 1 week apart for the following weeks
+
+# Example 
+`./file_creator May 21 2019`
+
